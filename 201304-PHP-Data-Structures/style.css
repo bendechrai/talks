@@ -1,0 +1,24 @@
+
+#trees h2 {
+	margin-bottom: 6em;
+}
+
+#overview ul,
+#overview p {
+	font-size: 70%;
+	margin-top: 1em;
+}
+
+#thanks .contact {
+	font-family: "Sonsie One", serif;
+	margin-top: 17em;
+	font-size: 40%;
+}
+#thanks .contact {
+	text-align: center;
+}
+#thanks .contact ul li {
+	display: inline;
+	margin: 0 0.5em;
+}
+

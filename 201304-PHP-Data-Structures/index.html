@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=1024" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<title>PHP Data Structures</title>
+	<meta name="author" content="Ben Dechrai" />
+	<link href="../assets/css/impress.css" rel="stylesheet" />
+	<link href="../assets/css/highlight.github.css" rel="stylesheet" />
+	<link href="../assets/css/font-awesome.css" rel="stylesheet">
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="../awesome/css/font-awesome-ie7.min.css">
+	<![endif]-->
+	<link href="../assets/css/bendechrai.css" rel="stylesheet">
+	<link href="style.css" rel="stylesheet" />
+</head>
+<body class="impress-not-supported">
+	<div class="fallback-message">
+		<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified version of this presentation.</p>
+		<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+	</div>
+	<div id="impress">
+		<div id="title" class="title step" data-x="0" data-rotate-y="0" data-scale="10">
+			<h1>PHP Data Structures</h1>
+			<h2>by Ben Dechrai</h2>
+			<h3>Melbourne PHP Users Group, April 16th 2013</h3>
+		</div>
+		<div id="overview" class="title step" data-z="6000" data-rotate-y="90" data-rotate-z="-60" data-scale="10">
+			<h2>Overview</h2>
+			<ul>
+				<li>Different types of programmatically structures</li>
+				<li>Different data store structures (SQL-based RDBMS)</li>
+				<li>Heavy conentration on trees</li>
+			</ul>
+			<p>I will not cover SPL; that's for another time.</p>
+		</div>
+		<div id="arrays" class="title step" data-x="-12000" data-y="0" data-z="-5000" data-rotate-y="100" data-scale="15">
+			<h2>Arrays</h2>
+		</div>
+		<div class="step slide" data-x="0" data-y="350" data-z="-4000" data-rotate-y="90" data-scale="1">
+			<h3>PHP Arrays</h3>
+			<p>Implemented as an Ordered Map, PHP arrays can represent:</p>
+			<ul>
+				<li>Collections and Sets</li>
+				<li>Hash Tables and Associative Arrays</li>
+				<li>Stacks and Queues</li>
+				<li>Heaps and Trees</li>
+			</ul>
+		</div>
+		<div class="step slide" data-x="0" data-y="350" data-z="-5000" data-rotate-y="90" data-scale="1">
+			<h3>Collections and Sets</h3>
+			<p>The simplest form of array usage - just stores values:</p>
+			<pre><code class="php">
+				$numbers = array( 1, 2, 3, 4 );
+				$words = array( 'all', 'your', 'array', 'are', 'belong', 'to', 'us' );
+			</code></pre>
+			<p>You can perform merges, intersects and diffs on arrays, but note it's <strong>much</strong> more performant to perform them on the array keys, not values:</p>
+			<pre><code>
+				// Slow:
+				$set1 = array( 1, 2, 3 ); $set2 = array( 2, 3, 4 );
+				$set3 = array_diff( $set1, $set2 );
+				// Better:
+				$set1 = array( '1'=&gt;true, '2'=&gt;true, '3'=&gt;true );
+				$set2 = array( '1'=&gt;true, '2'=&gt;true, '3'=&gt;true );
+				$set3 = array_diff_key( $set1, $set2 );
+			</code></pre>
+		</div>
+		<div class="step slide" data-x="350" data-z="-5000" data-rotate-z="-90" data-rotate-x="90" data-scale="1">
+			<h3>Storing Collections and Sets</h3>
+			<p>Databases are tables, so this maps really easy to a table.</p>
+			<pre><code class="sql">
+				CREATE TABLE numbers (
+				    data varchar(255)
+				);
+				INSERT INTO numbers (data)
+				    VALUES ( 1 ), ( 2 ), ( 3 ), ( 4 );
+			</code></pre>
+			<table class="sql">
+				<thead>
+					<tr><th>data</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>1</td></tr>
+					<tr><td>2</td></tr>
+					<tr><td>3</td></tr>
+					<tr><td>4</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="step slide" data-x="0" data-y="350" data-z="-6000" data-rotate-y="90" data-scale="1">
+			<h3>Hash Tables / Associative Arrays</h3>
+			<p><span class="q">A structure that maps keys to values by applying a hashing operation on the key to determine the location of the value.</span></p>
+			<p>PHP implements this all behind the scenes. You simply use:</p>
+			<pre><code class="php">
+				$configuration['admin_email'] = 'admin@example.com';
+				$configuration['products_per_page'] = 64;
+			</code></pre>
+		</div>
+		<div class="step slide" data-x="350" data-z="-6000" data-rotate-z="-90" data-rotate-x="90" data-scale="1">
+			<h3>Storing Hashes</h3>
+			<p>Add the name to the database table:</p>
+			<pre><code class="sql">
+				CREATE TABLE configuration (
+				    name varchar(255),
+				    data varchar(255)
+				);
+				INSERT INTO configuration (name, data)
+				    VALUES ( 'admin_email', 'admin@example.com' ),
+				    ( 'products_per_page', 64);
+			</code></pre>
+			<table class="sql">
+				<thead>
+					<tr><th>key</th><th>data</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>admin_email</td><td>admin@example.com</td></tr>
+					<tr><td>products_per_page</td><td>64</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="step slide" data-x="0" data-y="350" data-z="-7000" data-rotate-y="90" data-scale="1">
+			<h3>Stacks and Queues</h3>
+			<p>Collections that allow you to add elements and remove them:</p>
+			<ul>
+				<li>First in, last out, like the stack of trolleys at the supermarket, or</li>
+				<li>First in, first out, like the queue at the checkout.</li>
+			</ul>
+		</div>
+		<div class="step slide" data-x="0" data-y="550" data-z="-6800" data-rotate-y="90" data-scale="0.4">
+			<h3>Stacks</h3>
+			<p>PHP provides the <code class="php">array_push()</code> and <code class="php">array_pop()</code> functions to push on to a stack and pop off the top of a stack.</p>
+			<pre><code class="php">
+				$trolleys = array( 1, 2, 3 );
+				$trolley = array_pop( $trolleys ); // Someone takes a trolley
+				print_r( $trolleys );
+				echo "Trolley $trolley\n";
+				array_push( $trolleys, 4 ); // Someone returns another trolley
+				print_r( $trolleys );
+			</code></pre>
+			<p>Results in:</p>
+			<pre><code class="php">
+				Array ( [0] =&gt; 1 [1] =&gt; 2 )
+				Trolley 3
+				Array ( [0] =&gt; 1 [1] =&gt; 2 [2] =&gt; 4 )
+			</code></pre>
+		</div>
+		<div class="step slide" data-x="0" data-y="550" data-z="-7200" data-rotate-y="90" data-scale="0.4">
+			<h3>Queues</h3>
+			<p>PHP provides the <code class="php">array_shift()</code> to grab elements off the tail of the queue. Continue to use <code class="php">array_push()</code> to add to the head.</p>
+			<pre><code class="php">
+				$people = array( 'Alice', 'Bob', 'Charlie' );
+				array_push( $people, 'Denise' ); // Denise joins the queue
+				print_r( $people );
+				$next = array_shift( $people );
+				echo "Next is $next\n";
+				print_r( $people );
+			</code></pre>
+			<p>Results in:</p>
+			<pre><code class="php">
+				Array ( [0] =&gt; Alice [1] =&gt; Bob [2] =&gt; Charlie [3] =&gt; Denise )
+				Next is Alice
+				Array ( [0] =&gt; Bob [1] =&gt; Charlie [2] =&gt; Denise )
+			</code></pre>
+		</div>
+		<div class="step slide" data-x="350" data-z="-7000" data-rotate-z="-90" data-rotate-x="90" data-scale="1">
+			<h3>Stacks and Queues</h3>
+			<p>Stacks and Queues are ordered arrays. Add an order integer to determine order:</p>
+			<pre><code class="sql">
+				CREATE TABLE people (
+				    name varchar(255),
+				    order int unsigned
+				);
+			</code></pre>
+			<table class="sql">
+				<thead>
+					<tr><th>name</th><th>order</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>Denise</td><td>4</td></tr>
+					<tr><td>Bob</td><td>2</td></tr>
+					<tr><td>Charlie</td><td>3</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="step slide" data-x="0" data-y="350" data-z="-8000" data-rotate-y="90" data-scale="1">
+			<h3>Trees</h3>
+			<p>Trees are used to represent hierarchical or relational data:</p>
+			<ul>
+				<li>Hard driver directory structure</li>
+				<li>Customer orders, product information, etc</li>
+				<li>Category structures</li>
+			</ul>
+			<p class="center"><img src="tree.png"/></p>
+		</div>
+		<div class="step slide" data-x="0" data-y="350" data-z="-9000" data-rotate-y="90" data-scale="1">
+			<h3>Trees (continued)</h3>
+			<p>Very similar to Dictionaries, except PHP can make use of nested associative arrays:</p>
+			<pre><code class="php">
+				$json = array(
+				    'users'=&gt; array(
+				        array(
+				            'username' =&gt; 'bendechrai',
+				            'orders' =&gt; array( ... ),
+				        ),
+				        array(
+				            'username' =&gt; 'janedoe',
+				            'orders' =&gt; array( ... ),
+				        ),
+				    ),
+				);
+			</code></pre>
+		</div>
+		<div id="trees" class="title step" data-x="6000" data-z="5000" data-rotate-x="90" data-scale="10">
+			<h2>Storing Nested Arrays</h2>
+		</div>
+		<div class="step slide" data-x="7000" data-z="5000" data-rotate-x="90" data-scale="1">
+			<h2>Parent IDs</h2>
+			<ul>
+				<li>Simplest and most common implementation</li>
+				<li>Every node in a tree has one parent</li>
+				<li>Add a pointer in the node to the parent</li>
+			</ul>
+			<p class="center"><img src="tree-with-parent-ids.png"/></p>
+		</div>
+		<div class="step slide" data-x="6000" data-z="6000" data-rotate-x="90" data-scale="1">
+			<h3>Database Representation</h3>
+			<table class="sql">
+				<thead>
+					<tr><th>id</th><th>name</th><th>parent_id</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>1</td><td>Products</td><td>NULL</td></tr>
+					<tr><td>2</td><td>Clothing</td><td>1</td></tr>
+					<tr><td>3</td><td>Toys</td><td>1</td></tr>
+					<tr><td>4</td><td>Gardening</td><td>1</td></tr>
+					<tr><td>5</td><td>T-Shirts</td><td>2</td></tr>
+					<tr><td>6</td><td>Lego</td><td>3</td></tr>
+					<tr><td>7</td><td>Tools</td><td>4</td></tr>
+					<tr><td>8</td><td>Socks</td><td>2</td></tr>
+					<tr><td>9</td><td>Jeans</td><td>2</td></tr>
+					<tr><td>10</td><td>Plants</td><td>4</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="step slide" data-x="5200" data-z="7000" data-rotate-x="90" data-scale="1">
+			<h3>Drawbacks</h3>
+			<ul>
+				<li>Recursion through the tree requires recursion in code</li>
+			</ul>
+			<pre><code class="php">
+				function print_tree( $parent_id=NULL, $level=0 ) {
+				    foreach( get_children( $parent_id ) as $child ) {
+				        echo str_repeat( '  ', $level ) . $child-&gt;name . "\n";
+				        print_tree( $child-&gt;id, $level+1 );
+				    }
+				}
+			</code></pre>
+			<ul>
+				<li>Path to a node cannot be detemined in one query</li>
+			</ul>
+			<pre><code class="php">
+				$node = get_node(7); $path = $node-&gt;name;
+				while( $node = get_node($node-&gt;parent_id) ) {
+				    $path = $node-&gt;name . " &gt; " . $path;
+				}
+			</code></pre>
+		</div>
+		<div class="step slide" data-x="8500" data-z="6000" data-rotate-x="90" data-scale="1">
+			<h2>Modified Preorder Tree Traversal</h2>
+			<ul>
+				<li>Slightly more complicated</li>
+				<li>Markers determine the order in which a line wraps the tree</li>
+			</ul>
+			<p class="center"><img src="mptt.png"/></p>
+		</div>
+		<div class="step slide" data-x="7050" data-z="7000" data-rotate-x="90" data-scale="1">
+			<h2>Leaf Nodes</h2>
+			<ul>
+				<li>Leaf nodes: left + 1 = right</li>
+			</ul>
+			<p class="center"><img src="mptt_leaves.png"/></p>
+		</div>
+		<div class="step slide" data-x="6400" data-z="8000" data-rotate-x="90" data-scale="1">
+			<h2>Node Paths and Parents</h2>
+			<ul>
+				<li>Parents: node.left &lt; child.left && node.right &gt; child.right</li>
+			</ul>
+			<p class="center"><img src="mptt_path.png"/></p>
+		</div>
+		<div class="step slide" data-x="7700" data-z="8000" data-rotate-x="90" data-scale="1">
+			<h2>Child Nodes</h2>
+			<ul>
+				<li>Children: node.left between parent.left and parent.right</li>
+			</ul>
+			<p class="center"><img src="mptt_children.png"/></p>
+		</div>
+		<div class="step slide" data-x="9800" data-z="7000" data-rotate-x="90" data-scale="1">
+			<h3>Database Representation</h3>
+			<table class="sql">
+				<thead>
+					<tr><th>name</th><th>left</th><th>right</th></tr>
+				</thead>
+				<tbody>
+					<tr><td>Products</td><td>1</td><td>20</td></tr>
+					<tr><td>Clothing</td><td>2</td><td>9</td></tr>
+					<tr><td>Toys</td><td>10</td><td>13</td></tr>
+					<tr><td>Gardening</td><td>14</td><td>19</td></tr>
+					<tr><td>T-Shirts</td><td>3</td><td>4</td></tr>
+					<tr><td>Lego</td><td>11</td><td>12</td></tr>
+					<tr><td>Tools</td><td>17</td><td>18</td></tr>
+					<tr><td>Socks</td><td>5</td><td>6</td></tr>
+					<tr><td>Jeans</td><td>7</td><td>8</td></tr>
+					<tr><td>Plants</td><td>15</td><td>16</td></tr>
+				</tbody>
+			</table>
+			<p>Not very human readable, but humans rarely read database tables.</p>
+		</div>
+		<div class="step slide" data-x="9150" data-z="8000" data-rotate-x="90" data-scale="1">
+			<h2>Print Tree</h2>
+			<pre><code class="php">
+				$path = array(); // Keep current path to determine indentation
+				foreach( get_all( 'ORDER BY left ASC' ) as $node ) {
+				    if( count($path) &gt; 0 ) {
+				        while( end($path)-&gt;right &lt; $node-&gt;right ) {
+				            array_pop( $path );
+				        }
+				    }
+				    echo str_repeat( '  ', count($path) ) . $node-&gt;name . "\n";
+				    $path[] = $node;
+				}
+			</code></pre>
+		</div>
+		<div class="step slide" data-x="10450" data-z="8000" data-rotate-x="90" data-scale="1">
+			<h2>Path to Node</h2>
+			<pre><code class="php">
+				foreach( get_parents( $plants ) as $node ) {
+				    echo $node-&gt;name . &quot; &gt; &quot;;
+				}
+				echo $plants-&gt;name;
+			</code></pre>
+			<p>Or, as an SQL one liner!</p>
+			<pre><code class="sql">
+				SELECT GROUP_CONCAT( name SEPARATOR &quot; &gt; &quot; )
+				    AS path FROM category
+				    WHERE left &lt;= node.left
+				    AND right &gt;= node.right
+			</code></pre>
+		</div>
+		<div class="step slide" data-x="11450" data-y="-3000" data-z="-8000" data-rotate-x="45" data-rotate-y="45" data-scale="10">
+			<h3>Demo</h3>
+		</div>
+		<div id="thanks" class="title step" data-x="15000" data-y="-2000" data-z="07000" data-rotate-x="-20" data-rotate-y="70" data-scale="15">
+			<h2>You've Been Awesome!</h2>
+			<h3>Any Questions?</h3>
+			<div class="contact">
+				<ul class="nobullets">
+					<li><a href="https://twitter.com/bendechrai">@bendechrai</a></li>
+					<li><a href="mailto:ben@dechrai.com">ben@dechrai.com</li>
+					<li><a href="https://bendechrai.com/">bendechrai.com</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<script src="../assets/js/impress.js"></script>
+	<script src="../assets/js/highlight.min.js"></script>
+	<script>impress().init(); hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
