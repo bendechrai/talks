@@ -1,11 +1,53 @@
+body, html {
+	margin: 0;
+	padding: 0;
+}
+
+.talks {
+	margin: 0 auto;
+}
+
+@media only screen and (min-width : 1024px) {
+	.talks {
+		width: 960px;
+	}
+}
+
+@media only screen and (min-width : 800px) and (max-width : 1024px) {
+	.talks {
+		width: 715px;
+	}
+}
+
+@media only screen and (min-width : 480px) and (max-width : 800px) {
+	.talks {
+		width: 470px;
+	}
+}
+
+@media only screen and (max-width : 480px) {
+	.talks {
+		width: 100%;
+	}
+	.talk {
+		width: 100%;
+		margin: 0 20px 20px 0;
+	}
+}
+
+@media only screen and (min-width : 480px ) {
+	.talk {
+		float: left;
+		width: 225px;
+		margin: 0 20px 20px 0;
+		border-radius: 15px;
+		border: 1px solid #88f;
+	}
+}
+
 .talk {
-	float: left;
-	width: 225px;
-	margin: 0 20px 20px 0;
 	background: #fff;
 	background: rgba(255,255,255,0.3);
-	border-radius: 15px;
-	border: 1px solid #88f;
 	overflow: hidden;
 }
 
@@ -29,4 +71,18 @@
 .talk .location {
 	text-align: center;
 	font-size: 80%;
+}
+
+.footer {
+	clear: both;
+	text-align: center;
+	border-top: 1px solid #004;
+	border-bottom: 1px solid #004;
+	background-color: #444;
+	color: #ddd;
+}
+
+.footer a, .footer a:visited, .footer a:active {
+	color: #ddd;
+	text-decoration: underline;
 }
