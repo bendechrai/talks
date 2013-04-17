@@ -1,0 +1,32 @@
+.talk {
+	float: left;
+	width: 225px;
+	margin: 0 20px 20px 0;
+	background: #fff;
+	background: rgba(255,255,255,0.3);
+	border-radius: 15px;
+	border: 1px solid #88f;
+	overflow: hidden;
+}
+
+.talk:hover {
+	background: rgba(255,255,255,0.8);
+}
+.talk:hover .date {
+	background-color: #448;
+}
+
+.talk .date {
+	background-color: #333;
+	margin: 0;
+	padding: 0.5em 0;
+	color: #fff;
+	text-align: center;
+	font-family: 'Sonsie One';
+	font-size: 80%;
+}
+
+.talk .location {
+	text-align: center;
+	font-size: 80%;
+}
