@@ -57,5 +57,6 @@ if( $dir = opendir( dirname(__FILE__) ) ) {
 	</div>
 	<div class="footer">
 		<p>Talks available at <a href="https://github.com/bendechrai/talks">github.com/bendechrai/talks <i class="icon-github"></i></a></p>
+	</div>
 </body>
 </html>
